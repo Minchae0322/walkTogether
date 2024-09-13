@@ -6,8 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class WalkTogetherApplication {
 
-
-
     public static void main(String[] args) {
         SpringApplication.run(WalkTogetherApplication.class, args);
     }
