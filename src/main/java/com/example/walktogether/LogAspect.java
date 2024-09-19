@@ -18,7 +18,6 @@ public class LogAspect {
     private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
     @Around("execution(* com.example.walktogether.service.*.*(..))")
-
     public Object logExecutionStartAndEndTime(ProceedingJoinPoint joinPoint) throws Throwable {
         Object result = joinPoint.proceed();
 
