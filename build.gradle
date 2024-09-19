@@ -24,6 +24,14 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    // SLF4J (로깅)
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+
+     // JUnit Jupiter 의존성 추가
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
