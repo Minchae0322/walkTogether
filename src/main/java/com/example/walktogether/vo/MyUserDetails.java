@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-@RequiredArgsConstructor
 public record MyUserDetails(
         User user,
         Map<String, Object> attributes
