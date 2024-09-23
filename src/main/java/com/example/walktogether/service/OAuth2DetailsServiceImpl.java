@@ -5,6 +5,8 @@ import com.example.walktogether.repo.UserRepository;
 import com.example.walktogether.type.OAuth2Attribute;
 import com.example.walktogether.util.OAuth2ServiceInfo;
 import com.example.walktogether.util.OAuth2UserParams;
+import com.example.walktogether.vo.MyUserDetails;
+import com.example.walktogether.vo.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -29,7 +31,7 @@ public class OAuth2DetailsServiceImpl implements OAuth2UserService<OAuth2UserReq
 
         OAuth2UserParams oAuth2UserParams = extractOAuth2UserParams(userRequest, oAuth2User);
 
-        return (OAuth2User) getUserElseCreate(oAuth2UserParams);
+        return new MyUserDetails(getUserElseCreate(oAuth2UserParams), oAuth2UserParams.getAttributes());
     }
 
     private OAuth2UserParams extractOAuth2UserParams(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
@@ -47,8 +49,8 @@ public class OAuth2DetailsServiceImpl implements OAuth2UserService<OAuth2UserReq
         return OAuth2Attribute.createOAuth2UserParams(providerId, oAuth2ServiceInfo);
     }
 
-    private UserDetails getUserElseCreate(OAuth2UserParams oAuth2UserParams) {
-        return (UserDetails) userRepository.findByUsernameAndProviderId(oAuth2UserParams.getUsername(), oAuth2UserParams.getProviderId())
-                .orElseGet(() -> oAuth2UserParams.createUser(oAuth2UserParams));
+    private User getUserElseCreate(OAuth2UserParams oAuth2UserParams) {
+        return  userRepository.findByUsernameAndProviderId(oAuth2UserParams.getUsername(), oAuth2UserParams.getProviderId())
+                .orElseGet(() -> userRepository.save(oAuth2UserParams.createUser(oAuth2UserParams)));
     }
 }
