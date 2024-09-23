@@ -21,9 +21,10 @@ import java.util.stream.Collectors;
 import static com.example.walktogether.Constants.*;
 
 @Component
+
 public class IuwtProvider {
 
-    public static final Long ACCESS_TOKEN_EXPIRATION = 60 * 60 * 1000L;
+    public static final Long ACCESS_TOKEN_EXPIRATION = 60 * 60 * 24 * 7L;
 
     private final Key key;
 

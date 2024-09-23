@@ -3,7 +3,7 @@ package com.example.walktogether.handler;
 
 import com.example.walktogether.annotation.EndTimeLoggable;
 import com.example.walktogether.dto.IuwtDto;
-import com.example.walktogether.service.IUWTService;
+import com.example.walktogether.service.IuwtService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,12 +13,15 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 
 import java.io.IOException;
 
+import static com.example.walktogether.Constants.TOKEN_EXPIRE_TIME;
+import static com.example.walktogether.util.IuwtProvider.ACCESS_TOKEN_EXPIRATION;
+
 
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 
-    private final IUWTService iuwtService;
+    private final IuwtService iuwtService;
 
     @Override
     @EndTimeLoggable
@@ -28,20 +31,18 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         response.setHeader("Authorization", iuwtDto.iuwt());
         response.addCookie(cookie);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     private Cookie setCookie(IuwtDto iuwtDto) {
-        Cookie cookie = new Cookie("Authorization", iuwtDto.iuwt());
+        Cookie cookie = new Cookie("Authorization", iuwtDto.uuid());
         cookie.setHttpOnly(true);
 
-        // Secure 설정 (HTTPS에서만 사용 가능)
-        cookie.setSecure(true); // HTTPS 사용시 true로 설정
+        cookie.setSecure(true);
 
-        // 쿠키 경로 설정 ("/"로 설정하면 애플리케이션 전역에서 사용 가능)
         cookie.setPath("/");
 
-        // 쿠키의 만료 시간 설정 (예: 7일)
-        cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 쿠키 유효
+        cookie.setMaxAge(Math.toIntExact(ACCESS_TOKEN_EXPIRATION));
         return cookie;
     }
 
