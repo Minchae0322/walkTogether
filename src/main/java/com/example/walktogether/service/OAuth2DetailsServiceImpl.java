@@ -49,6 +49,6 @@ public class OAuth2DetailsServiceImpl implements OAuth2UserService<OAuth2UserReq
 
     private UserDetails getUserElseCreate(OAuth2UserParams oAuth2UserParams) {
         return (UserDetails) userRepository.findByUsernameAndProviderId(oAuth2UserParams.getUsername(), oAuth2UserParams.getProviderId())
-                .orElseGet(() -> oAuth2UserParams.createUser(oAuth2UserParams));
+                .orElseGet(() -> userRepository.save(oAuth2UserParams.createUser(oAuth2UserParams)));
     }
 }

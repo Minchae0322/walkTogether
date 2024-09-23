@@ -2,6 +2,7 @@ package com.example.walktogether.config;
 
 import com.example.walktogether.handler.LoginFailureHandler;
 import com.example.walktogether.handler.LoginSuccessHandler;
+import com.example.walktogether.service.IUWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
+    private final IUWTService iuwtService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -33,18 +36,12 @@ public class WebSecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
-                        .successHandler(new LoginSuccessHandler())
+                        .successHandler(new LoginSuccessHandler(iuwtService))
                         .failureHandler(new LoginFailureHandler())
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
-
-
-
-
-
-
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
